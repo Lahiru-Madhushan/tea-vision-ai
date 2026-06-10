@@ -1,0 +1,16 @@
+streamlit>=1.32.0
+pillow>=10.0.0
+tensorflow>=2.15.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+flask>=3.0.0
+flask-cors>=4.0.0
+python-dotenv>=1.0.0
+langchain-chroma>=0.1.0
+langchain-openai>=0.1.0
+langchain-community>=0.2.0
+langchain-core>=0.2.0
+langchain-classic>=0.0.1
+chromadb>=0.4.0
+sentence-transformers>=2.2.0
+openai>=1.0.0
