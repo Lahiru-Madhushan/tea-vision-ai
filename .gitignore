@@ -216,3 +216,36 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Virtual env
+env/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ML files
+*.npy
+*.h5
+*.keras
+*.pkl
+*.joblib
+*.pt
+*.pth
+
+# Datasets
+teaLeafBD/
+dataset/
+ai-service/DiseasePrediction/teaLeafBD/
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.webp
