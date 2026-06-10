@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 
 _MODEL_DIR = Path(__file__).resolve().parent
+_MODEL_PATH = _MODEL_DIR / "final_tea_model2.h5"
 
 CLASS_NAMES = [
     "Tea algal leaf spot",
@@ -16,45 +17,33 @@ CLASS_NAMES = [
     "Healthy leaf",
 ]
 
-# Prefer models that produce meaningful predictions (final_tea_model.h5 outputs ~14% for all classes)
-MODEL_CANDIDATES = [
-    _MODEL_DIR / "prediction Model2" / "final_tea_model2.h5",
-    _MODEL_DIR / "best_tea_model.keras",
-    _MODEL_DIR / "final_tea_model.h5",
-]
-
 _model = None
-_active_model_path: Path | None = None
 
 
-def get_active_model_path() -> Path | None:
-    if _active_model_path is not None:
-        return _active_model_path
-    for path in MODEL_CANDIDATES:
-        if path.exists():
-            return path
-    return None
+def get_model_path() -> Path:
+    return _MODEL_PATH
+
+
+def model_exists() -> bool:
+    return _MODEL_PATH.exists()
 
 
 def _load_model():
-    global _model, _active_model_path
+    global _model
 
     if _model is not None:
         return _model
 
+    if not _MODEL_PATH.exists():
+        raise FileNotFoundError(
+            f"Model not found: {_MODEL_PATH}. "
+            "Place final_tea_model2.h5 in DiseasePrediction/prediction Model2/"
+        )
+
     from tensorflow.keras.models import load_model
 
-    for path in MODEL_CANDIDATES:
-        if path.exists():
-            _model = load_model(str(path))
-            _active_model_path = path
-            print(f"Loaded disease model: {path.name}")
-            return _model
-
-    raise FileNotFoundError(
-        "No trained model found. Place model weights in DiseasePrediction/ "
-        "(final_tea_model2.h5, best_tea_model.keras, or final_tea_model.h5)."
-    )
+    _model = load_model(str(_MODEL_PATH))
+    return _model
 
 
 def _preprocess_image(image_path: str) -> np.ndarray:
@@ -82,7 +71,7 @@ def predict_disease_detailed(image_path: str) -> dict:
         "disease": disease,
         "confidence": confidence,
         "probabilities": probabilities,
-        "model": _active_model_path.name if _active_model_path else "unknown",
+        "model": _MODEL_PATH.name,
     }
 
 

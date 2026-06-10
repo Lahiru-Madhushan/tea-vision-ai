@@ -4,10 +4,13 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate 
 from langchain_classic.memory import ConversationBufferMemory
 from langchain_classic.chains import ConversationalRetrievalChain
-from dotenv import load_dotenv
 import os
-load_dotenv()
-openai_api_key = os.getenv("API_KEY")
+
+from services.env_config import get_openai_api_key, load_app_env
+
+_CHATBOT_DIR = os.path.dirname(os.path.abspath(__file__))
+load_app_env()
+openai_api_key = get_openai_api_key()
 
 
 embeddings = HuggingFaceEmbeddings(
@@ -16,7 +19,7 @@ embeddings = HuggingFaceEmbeddings(
 
 
 vectorstore = Chroma(
-    persist_directory="./chroma_db",
+    persist_directory=os.path.join(_CHATBOT_DIR, "chroma_db"),
     embedding_function=embeddings
 )
 
